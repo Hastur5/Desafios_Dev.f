@@ -1,0 +1,1 @@
+Sirve para guardar porciones de código que estaremos reutilizando en nuestros navegadores.

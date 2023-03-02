@@ -1,0 +1,1 @@
+Aquí se van a poner todas los archivos públicos: imagenes, videos, html, css, logos, etc.

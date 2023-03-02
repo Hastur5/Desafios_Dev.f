@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('partials/header') %>
+    <title>Mascota</title>
+</head>
+<body>
+    <%- include('partials/navigation') %>
+    <div class="container p-4">
+        <form method="post" action="/new-entry" class="card card-body">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input class="form-control" type="text" name="id" id="id" placeholder="Ingresa el ID de tu mascota" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingresa el nombre de tu mascota" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="apodo">Apodo</label>
+                <input class="form-control" type="text" name="apodo" id="apodo" placeholder="¿Cómo sueles apodar a tu mascota?" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="raza">Raza</label>
+                <input class="form-control" type="text" name="raza" id="raza" placeholder="¿Qué raza es?" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="imagen">Imagen</label>
+                <input class="form-control" type="text" name="imagen" id="imagen" placeholder="" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="edad">Edad</label>
+                <input class="form-control" type="text" name="edad" id="edad" placeholder="¿Qué edad tiene?" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea name="descripcion" id="descripcion" rows="5" class="form-control"></textarea>
+            </div>
+            <input type="submit" value="Salva mascota" class="btn btn-dark">
+        </form>
+
+</div>
+</body>
+</html>

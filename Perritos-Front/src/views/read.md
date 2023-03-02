@@ -1,0 +1,1 @@
+Aquí se va a escribir el código HTML en varios archivos. Para que el navegador tome estructura.

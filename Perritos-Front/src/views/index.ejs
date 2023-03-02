@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('partials/header') %>
+    <title>Holis :3</title>
+</head>
+<body>
+    <%- include('partials/navigation') %>
+    <div class="container p-4">
+        <div class="row">
+            <% perros.forEach(function(perro){ %>
+                <div class="col-md-4">
+                    <div class="card"> 
+                        <div class="card-header">
+                            <%= perro.nombre %> "<%= perro.apodo %>"
+                        </div>
+                        <img src="<%= perro.imagen %>" class="card-img-top">
+                        <div class="card-body">
+                            <p><%= perro.descripcion %></p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/delete/<%= perro.id %>" class="btn btn-danger"></a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+</body>
+</html>
