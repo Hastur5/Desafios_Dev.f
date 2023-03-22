@@ -11,7 +11,7 @@ export default class creators extends Model {
         allowNull: false,
         primaryKey: true
       },
-      name: {
+      creator_name: {
         type: DataTypes.STRING(100),
         allowNull: false
       },
