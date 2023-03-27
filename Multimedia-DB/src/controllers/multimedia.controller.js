@@ -1,9 +1,7 @@
-/* eslint-disable prefer-const */
-/* eslint-disable no-unused-vars */
-/* eslint-disable camelcase */
 import { sequelize } from "../database/database.js";
 import modelosInit from "../models/init-models.js";
 import { Op } from "sequelize";
+import file_types from "../models/file_types.js";
 
 const models = modelosInit(sequelize);
 
@@ -48,11 +46,11 @@ export const getMultimedia = async (req, res) => {
 };
 
 export const addMultimedia = async (req, res) => {
-  // eslint-disable-next-line prefer-const
   let cuerpo = req.body;
 
   if ("album" in cuerpo && !("seasons" in cuerpo) && !("chapters" in cuerpo)) {
     addAudio(cuerpo);
+    console.log("se viene una song!!!");
   } else if (
     "seasons" in cuerpo &&
     !("album" in cuerpo) &&
@@ -64,7 +62,7 @@ export const addMultimedia = async (req, res) => {
     !("album" in cuerpo) &&
     !("seasons" in cuerpo)
   ) {
-    console.log("Esto esun audio libro");
+    console.log("Esto es un audio libro");
   } else {
     res.status(500).json({ error: "Tu petición es inválida." });
   }
@@ -87,9 +85,11 @@ const addAudio = async (cuerpo) => {
   let validation;
   let publisher_id;
   let creator_id;
+  let file_type_id;
   let audio_id;
   let performer_id;
   let multimedia_id;
+  let song_id;
   let { creator_name, last_name, age, bio, country } = cuerpo.creator;
   let { name_performer, country_performer, bio_performer } =
     cuerpo.songs_performer;
@@ -104,18 +104,6 @@ const addAudio = async (cuerpo) => {
       publisher_id = response.dataValues.id_publisher;
     } else {
       publisher_id = validation[0].dataValues.id_publisher;
-    }
-
-    validation = await models.audios.findAll({
-      where: { name: cuerpo.audio },
-    });
-    if (validation.length === 0) {
-      response = await models.audios.create({
-        name: cuerpo.audio.trim(),
-      });
-      audio_id = response.dataValues.id_audio;
-    } else {
-      audio_id = validation[0].dataValues.id_audio;
     }
 
     validation = await models.creators.findAll({
@@ -148,20 +136,8 @@ const addAudio = async (cuerpo) => {
       });
       performer_id = response.dataValues.id_performer;
     } else {
-      perfomer_id = validation[0].dataValues.id_performer;
+      performer_id = validation[0].dataValues.id_performer;
     }
-
-    // validation = await models.songs.findAll({
-    //   where: {
-    //     duration,
-    //     album: album.trim(),
-    //     perfomer_id,
-    //     audio_id,
-    //   },
-    // });
-    // if (validation.lenght === 0) {
-    //   response = await
-    // }
 
     validation = await models.multimedias.findAll({
       where: {
@@ -172,19 +148,73 @@ const addAudio = async (cuerpo) => {
       },
     });
     if (validation.length === 0) {
-      response = await models.multimedias.create({
-        name: cuerpo.name,
-        description: cuerpo.description,
-        original_language: cuerpo.original_language,
-        release_year: cuerpo.release_year,
+      validation = await models.multimedias.create({
+        name: cuerpo.name.trim(),
+        description: cuerpo.description.trim(),
+        original_language: cuerpo.original_language.trim(),
+        release_year: cuerpo.release_year.trim(),
         creator_id,
         publisher_id,
       });
       multimedia_id = response.dataValues.id_multimedia;
+      console.log(multimedia_id);
     } else {
+      multimedia_id = validation[0].dataValues.id_multimedia;
+      console.log(multimedia_id);
       console.log("Ya estaba, bro");
     }
-    // console.log(validation)
+
+    validation = await models.file_types.findAll({
+      where: { extension: cuerpo.extension },
+    });
+    if (validation.length === 0) {
+      response = await models.file_types.create({
+        extension: cuerpo.extension.trim(),
+      });
+      file_type_id = response.dataValues.id_file_type;
+      console.log(file_type_id);
+    } else {
+      file_type_id = validation[0].dataValues.id_file_type;
+      console.log(file_type_id);
+    }
+
+    validation = await models.audios.findAll({
+      where: {
+        multimedia_id,
+        file_type_id,
+      },
+    });
+    if (validation.length === 0) {
+      response = await models.audios.create({
+        multimedia_id,
+        file_type_id,
+      });
+      audio_id = response.dataValues.id_audio;
+      console.log(audio_id);
+    } else {
+      audio_id = validation[0].dataValues.id_audio;
+    }
+
+    validation = await models.songs.findAll({
+      where: {
+        album: cuerpo.album,
+        duration: cuerpo.duration,
+        performer_id,
+      },
+    });
+    if (validation.length === 0) {
+      response = await models.songs.create({
+        album: cuerpo.album.trim(),
+        duration: cuerpo.duration.trim(),
+        audio_id,
+        performer_id,
+      });
+      song_id = response.dataValues.id_song;
+      console.log(song_id);
+    } else {
+      song_id = validation[0].dataValues.id_song;
+      console.log(song_id);
+    }
   } catch (e) {
     console.log(e.message);
     // validation.status(500).json({ error: e.message });
@@ -192,5 +222,3 @@ const addAudio = async (cuerpo) => {
   // res.status(200).json(cuerpo)
   console.log("Esto es una buena song");
 };
-
-// Se agrega línea para actualziar.
