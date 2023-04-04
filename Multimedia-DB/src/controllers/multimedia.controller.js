@@ -1,7 +1,6 @@
 import { sequelize } from "../database/database.js";
 import modelosInit from "../models/init-models.js";
 import { Op } from "sequelize";
-import file_types from "../models/file_types.js";
 
 const models = modelosInit(sequelize);
 
@@ -148,7 +147,7 @@ const addAudio = async (cuerpo) => {
       },
     });
     if (validation.length === 0) {
-      validation = await models.multimedias.create({
+      response = await models.multimedias.create({
         name: cuerpo.name.trim(),
         description: cuerpo.description.trim(),
         original_language: cuerpo.original_language.trim(),
